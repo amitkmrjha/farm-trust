@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package com.lightbend.farmtrust.farmitem.action;
+
+import "akkaserverless/annotations.proto";
+import "farm_item/farm_item_domain.proto";
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+option java_outer_classname = "FarmItemEventSubscribeTopic";
+
+service FarmItemEventSubscriberService {
+    // get ItemAdded from the topic
+    rpc SubscribeCropSeasonFinished(domain.CropSeasonFinished) returns (google.protobuf.Empty) {
+        option (akkaserverless.method).eventing.in = {
+            topic: "farm-land-events"
+        };
+    }
+
+    rpc CatchOthers(google.protobuf.Any) returns (google.protobuf.Empty) {
+        option (akkaserverless.method).eventing.in = {
+            topic: "farm-land-events"
+        };
+    };
+
+}

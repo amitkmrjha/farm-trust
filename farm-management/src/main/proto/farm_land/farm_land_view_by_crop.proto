@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package com.lightbend.farmtrust.farmland.view;
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "farm_land/farm_land_domain.proto";
+import "google/api/annotations.proto";
+
+option java_outer_classname = "FarmLandViewByCropModel";
+
+message FarmLandQueryByCropName {
+     string crop_name = 1;
+}
+
+service FarmLandByCropNameView {
+    rpc ProcessCropSeasonStarted(domain.CropSeasonStarted) returns (domain.FarmLandState) {
+        option (akkaserverless.method).eventing.in = {
+            event_sourced_entity: "farmland"
+        };
+        option (akkaserverless.method).view.update = {
+            table: "farmland"
+            transform_updates: true
+        };
+    }
+
+    rpc ProcessSoilPreparationStarted (domain.SoilPreparationStarted) returns (domain.FarmLandState) {
+        option (akkaserverless.method).eventing.in = {
+            event_sourced_entity: "farmland"
+        };
+        option (akkaserverless.method).view.update = {
+            table: "farmland"
+            transform_updates: true
+        };
+    }
+
+    rpc ProcessSeedingStarted(domain.SeedingStarted) returns (domain.FarmLandState) {
+        option (akkaserverless.method).eventing.in = {
+            event_sourced_entity: "farmland"
+        };
+        option (akkaserverless.method).view.update = {
+            table: "farmland"
+            transform_updates: true
+        };
+    }
+
+    rpc ProcessPlantingStarted(domain.PlantingStarted) returns (domain.FarmLandState) {
+        option (akkaserverless.method).eventing.in = {
+            event_sourced_entity: "farmland"
+        };
+        option (akkaserverless.method).view.update = {
+            table: "farmland"
+            transform_updates: true
+        };
+    }
+
+    rpc ProcessCaringStarted(domain.CaringStarted) returns (domain.FarmLandState) {
+        option (akkaserverless.method).eventing.in = {
+            event_sourced_entity: "farmland"
+        };
+        option (akkaserverless.method).view.update = {
+            table: "farmland"
+            transform_updates: true
+        };
+    }
+
+    rpc ProcessHealthCheckUpStarted(domain.HealthCheckUpStarted) returns (domain.FarmLandState) {
+        option (akkaserverless.method).eventing.in = {
+            event_sourced_entity: "farmland"
+        };
+        option (akkaserverless.method).view.update = {
+            table: "farmland"
+            transform_updates: true
+        };
+    }
+
+    rpc ProcessPestAndDiseaseControlStarted (domain.PestAndDiseaseControlStarted) returns (domain.FarmLandState) {
+        option (akkaserverless.method).eventing.in = {
+            event_sourced_entity: "farmland"
+        };
+        option (akkaserverless.method).view.update = {
+            table: "farmland"
+            transform_updates: true
+        };
+    }
+
+    rpc ProcessHarvestStarted(domain.HarvestStarted) returns (domain.FarmLandState) {
+        option (akkaserverless.method).eventing.in = {
+            event_sourced_entity: "farmland"
+        };
+        option (akkaserverless.method).view.update = {
+            table: "farmland"
+            transform_updates: true
+        };
+    }
+
+    rpc ProcessCropSeasonFinished(domain.CropSeasonFinished) returns (domain.FarmLandState) {
+        option (akkaserverless.method).eventing.in = {
+            event_sourced_entity: "farmland"
+        };
+        option (akkaserverless.method).view.update = {
+            table: "farmland"
+            transform_updates: true
+        };
+    }
+
+    rpc GetFarmLandByCropName(FarmLandQueryByCropName) returns (stream domain.FarmLandState) {
+        option (akkaserverless.method).view.query = {
+            query: "SELECT * FROM farmland WHERE crop_name = :crop_name"
+        };
+    }
+}

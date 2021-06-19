@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package com.lightbend.farmtrust.farmland.domain;
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_outer_classname = "FarmLandDomain";
+
+message CropSeasonStarted {
+    FarmLandState farmLandState = 1;
+}
+
+message SoilPreparationStarted {
+    FarmLandState farmLandState = 1;
+}
+
+message SeedingStarted {
+    FarmLandState farmLandState = 1;
+}
+
+message PlantingStarted {
+    FarmLandState farmLandState = 1;
+}
+
+message CaringStarted {
+    FarmLandState farmLandState = 1;
+}
+
+message HealthCheckUpStarted {
+    FarmLandState farmLandState = 1;
+}
+
+message PestAndDiseaseControlStarted  {
+    FarmLandState farmLandState = 1;
+}
+
+message HarvestStarted {
+    FarmLandState farmLandState = 1;
+}
+
+message CropSeasonFinished {
+    FarmLandState farmLandState = 1;
+}
+
+
+option (akkaserverless.file).event_sourced_entity = {
+    name: "FarmLand"
+    entity_type: "farmland"
+    state: "FarmLandState"
+    events: ["CropSeasonStarted", "SoilPreparationStarted", "SeedingStarted",
+        "PlantingStarted", "CaringStarted", "HealthCheckUpStarted", "PestAndDiseaseControlStarted",
+        "HarvestStarted", "CropSeasonFinished"]
+};
+
+message FarmLandState {
+    string farm_land_id = 1 ;
+    int32 cycle_number = 2;
+    string farmer_name = 3;
+    string crop_name = 4;
+    repeated FarmLandEventLog farmLandEventLog = 5;
+    string unitItem = 6;
+    int32 quantity =  7;
+    string status = 8;
+}
+
+message FarmLandEventLog {
+    string farm_event_name = 1 ;
+    FarmLandLog log = 2;
+}
+
+message FarmLandLog {
+    string log_name = 1;
+    string log_info = 2;
+    google.protobuf.Timestamp timestamp = 3;
+}

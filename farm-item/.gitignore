@@ -1,0 +1,7 @@
+.idea
+*.iml
+mycreds.json
+target
+project
+dependency-reduced-pom.xml
+.DS_Store

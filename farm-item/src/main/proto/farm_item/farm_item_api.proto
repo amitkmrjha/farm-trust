@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package com.lightbend.farmtrust.farmitem;
+
+option java_outer_classname = "FarmItemApi";
+
+message CreateItemMessage {
+  string item_id = 1 [(akkaserverless.field).entity_key = true];
+  string farm_land_id = 2;
+  int32 cycle_number = 3;
+  string farmer_name = 4;
+  string crop_name = 5;
+  string logFromFarm = 6;
+}
+
+message BuyItemMessage {
+  string item_id = 1 [(akkaserverless.field).entity_key = true];
+  string user_name = 2;
+}
+
+message RateItemMessage {
+  string item_id = 1 [(akkaserverless.field).entity_key = true];
+  double rating = 2;
+}
+
+message GetItemMessage {
+  string item_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message ItemInfo {
+  string item_id = 1 ;
+  string farm_land_id = 2;
+  int32 cycle_number = 3;
+  string farmer_name = 4;
+  string crop_name = 5;
+  string logFromFarm = 6;
+  string itemStatus = 7;
+  string boughtByUser = 8;
+  double userRating = 9;
+}
+
+
+service FarmItemService {
+  option (akkaserverless.service) = {
+    type : SERVICE_TYPE_ENTITY
+    component : ".domain.FarmItem"
+  };
+
+
+  rpc CreateItem(CreateItemMessage) returns (google.protobuf.Empty);
+  rpc BuyItem(BuyItemMessage) returns (ItemInfo);
+  rpc RateItem(RateItemMessage) returns (google.protobuf.Empty);
+  rpc GetItem(GetItemMessage) returns (ItemInfo);
+}

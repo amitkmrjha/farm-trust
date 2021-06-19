@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package com.lightbend.farmtrust.farmitem.domain;
+
+option java_outer_classname = "FarmItemDomain";
+
+
+option (akkaserverless.file).value_entity = {
+    name: "FarmItem"
+    entity_type: "farmitem"
+    state: "FarmItemState"
+};
+
+message FarmItemState {
+    string item_id = 1 ;
+    string farm_land_id = 2;
+    int32 cycle_number = 3;
+    string farmer_name = 4;
+    string crop_name = 5;
+    string logFromFarm = 6;
+    string itemStatus = 7;
+    string boughtByUser = 8;
+    double userRating = 9;
+}
+
+message CropSeasonFinished {
+    FarmLandState farmLandState = 1;
+}
+
+message FarmLandState {
+    string farm_land_id = 1 ;
+    int32 cycle_number = 2;
+    string farmer_name = 3;
+    string crop_name = 4;
+    repeated FarmLandEventLog farmLandEventLog = 5;
+    string unitItem = 6;
+    int32 quantity =  7;
+    string status = 8;
+}
+
+message FarmLandEventLog {
+    string farm_event_name = 1 ;
+    FarmLandLog log = 2;
+}
+
+message FarmLandLog {
+    string log_name = 1;
+    string log_info = 2;
+    google.protobuf.Timestamp timestamp = 3;
+}

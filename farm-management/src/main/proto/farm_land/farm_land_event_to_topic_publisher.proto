@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package com.lightbend.farmtrust.farmland.action;
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "farm_land/farm_land_domain.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+option java_outer_classname = "FarmLandEventPublishTopic";
+
+service EventToTopicPublisherService {
+    rpc PublishCropSeasonFinished(domain.CropSeasonFinished) returns (domain.CropSeasonFinished) {
+        option (akkaserverless.method).eventing = {
+            in: {
+                event_sourced_entity: "farmland"
+            }
+            out: {
+                topic: "farm-land-events"
+            }
+        };
+    }
+    rpc CatchOthers(google.protobuf.Any) returns (google.protobuf.Empty) {
+        option (akkaserverless.method).eventing.in = {
+            event_sourced_entity: "farmland"
+        };
+    };
+
+}

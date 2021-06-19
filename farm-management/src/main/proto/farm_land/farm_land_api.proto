@@ -1,0 +1,104 @@
+// This is the public API offered by your entity.
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package com.lightbend.farmtrust.farmland;
+
+option java_outer_classname = "FarmLandApi";
+
+message StartCropSeasonMessage {
+    string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
+    string crop_name = 2;
+    string farmer_name = 3;
+}
+
+message SoilPreparationMessage {
+    string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
+    string weather_info = 2;
+}
+
+message SeedingMessage {
+    string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
+    string seed_info = 2;
+}
+
+message PlantingMessage {
+    string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
+    string plant_info = 2;
+}
+
+message CaringMessage {
+    string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
+    string fertilization_info = 2;
+    string watering_info = 3;
+    string weeding_info = 4;
+    string manure_info = 5;
+}
+
+message HealthCheckUpMessage {
+    string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
+    string health_check_report = 2;
+}
+
+message PestAndDiseaseControlMessage  {
+    string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
+    string action_report = 2;
+}
+
+message HarvestMessage {
+    string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
+    string unit_item = 2;
+    int32 quantity =  3;
+}
+
+message FinishCropSeasonMessage {
+    string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message GetFarmLandMessage {
+    string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message CurrentFarmLand {
+    string farm_land_id = 1 ;
+    int32 cycle_number = 2;
+    string farmer_name = 3;
+    string crop_name = 4;
+    repeated FarmingProcessLog farmingProcessLog = 5;
+    string unitItem = 6;
+    int32 quantity =  7;
+    string farmStatus = 8;
+}
+
+message FarmingProcessLog {
+    string farm_event_name = 1 ;
+    ProcessLog log = 2;
+}
+
+message ProcessLog {
+    string log_name = 1;
+    string log_info = 2;
+    google.protobuf.Timestamp timestamp = 3;
+}
+
+service FarmlandService {
+    option (akkaserverless.service) = {
+        type : SERVICE_TYPE_ENTITY
+        component : ".domain.FarmLand"
+    };
+
+    rpc StartCropSeason(StartCropSeasonMessage) returns (google.protobuf.Empty);
+    rpc SoilPreparation(SoilPreparationMessage) returns (google.protobuf.Empty);
+    rpc Seeding(SeedingMessage) returns (google.protobuf.Empty);
+    rpc Planting(PlantingMessage) returns (google.protobuf.Empty);
+    rpc Caring(CaringMessage) returns (google.protobuf.Empty);
+    rpc HealthCheckUp(HealthCheckUpMessage) returns (google.protobuf.Empty);
+    rpc PestAndDiseaseControl(PestAndDiseaseControlMessage) returns (google.protobuf.Empty);
+    rpc Harvest(HarvestMessage) returns (google.protobuf.Empty);
+    rpc FinishCropSeason(FinishCropSeasonMessage) returns (google.protobuf.Empty);
+    rpc GetFarmLand(GetFarmLandMessage) returns (CurrentFarmLand);
+}
