@@ -12,7 +12,7 @@ import "google/protobuf/empty.proto";
 option java_outer_classname = "FarmLandEventPublishTopic";
 
 service EventToTopicPublisherService {
-    rpc PublishCropSeasonFinished(domain.CropSeasonFinished) returns (domain.CropSeasonFinished) {
+    rpc PublishHarvestStarted(domain.HarvestStarted) returns (domain.HarvestStarted) {
         option (akkaserverless.method).eventing = {
             in: {
                 event_sourced_entity: "farmland"

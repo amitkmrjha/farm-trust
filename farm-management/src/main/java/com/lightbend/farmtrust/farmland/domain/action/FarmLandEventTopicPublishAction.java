@@ -14,14 +14,18 @@ public class FarmLandEventTopicPublishAction {
     private static final Logger LOG = LoggerFactory.getLogger(FarmLandEventTopicPublishAction.class);
 
     @Handler
-    FarmLandDomain.CropSeasonFinished publishCropSeasonFinished(FarmLandDomain.CropSeasonFinished event) {
-        LOG.info("Publishing: '{}' event  with id '{}' to topic.",event.getClass().getSimpleName(), event.getFarmLandState().getFarmLandId());
+    FarmLandDomain.HarvestStarted publishHarvestStarted(FarmLandDomain.HarvestStarted event) {
+        LOG.info("Publishing: '{}' event  with id '{}'  cycle '{}' to topic.",
+                event.getClass().getSimpleName(),
+                event.getFarmLandState().getFarmLandId(),
+                event.getFarmLandState().getCycleNumber()
+        );
         return event;
     }
 
     @Handler
     public Empty catchOthers(Any event) {
-        LOG.info("Publishing: '{}' event  with id '{}' to topic.",event.getClass().getSimpleName(), "");
+        LOG.info("Publishing: '{}' event  with farm_id '{}' to topic.",event.getClass().getSimpleName(), "");
         return Empty.getDefaultInstance();
     }
 
