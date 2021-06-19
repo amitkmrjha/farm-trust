@@ -26,9 +26,10 @@ message FarmItemState {
     double userRating = 9;
 }
 
-message CropSeasonFinished {
+message HarvestStarted {
     FarmLandState farmLandState = 1;
 }
+
 
 message FarmLandState {
     string farm_land_id = 1 ;

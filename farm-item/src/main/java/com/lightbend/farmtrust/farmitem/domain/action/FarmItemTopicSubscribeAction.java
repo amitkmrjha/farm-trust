@@ -13,7 +13,7 @@ public class FarmItemTopicSubscribeAction {
     private static final Logger LOG = LoggerFactory.getLogger(FarmItemTopicSubscribeAction.class);
 
     @Handler
-    public Empty subscribeCropSeasonFinished(FarmItemDomain.CropSeasonFinished event) {
+    public Empty subscribeHarvestStarted(FarmItemDomain.HarvestStarted event) {
         LOG.info("Subscribed: '{}' event  with id '{}' from topic.",event.getClass().getSimpleName(), event.getFarmLandState().getFarmLandId());
         return Empty.getDefaultInstance();
     }
