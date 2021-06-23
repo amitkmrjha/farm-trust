@@ -14,13 +14,13 @@ public class FarmItemTopicSubscribeAction {
 
     @Handler
     public Empty subscribeHarvestStarted(FarmItemDomain.HarvestStarted event) {
-        LOG.info("Subscribed: '{}' event  with id '{}' from topic.",event.getClass().getSimpleName(), event.getFarmLandState().getFarmLandId());
+        LOG.debug("Subscribed: '{}' event  with id '{}' from topic.",event.getClass().getSimpleName(), event.getFarmLandState().getFarmLandId());
         return Empty.getDefaultInstance();
     }
 
     @Handler
     public Empty catchOthers(Any event) {
-        LOG.info("Subscribed: '{}' event  with id '{}' from topic.",event.getClass().getSimpleName(), "");
+        LOG.debug("Subscribed: '{}' event  with id '{}' from topic.",event.getClass().getSimpleName(), "");
         return Empty.getDefaultInstance();
     }
 
