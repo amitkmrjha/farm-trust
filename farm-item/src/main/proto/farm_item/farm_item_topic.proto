@@ -19,4 +19,10 @@ service FarmItemTopicService {
         };
     }
 
+    rpc ProtobufFromTopicTest(google.protobuf.Any) returns (google.protobuf.Empty) {
+        option (akkaserverless.method).eventing.in = {
+            topic:  "farm-land-events"
+        };
+    }
+
 }

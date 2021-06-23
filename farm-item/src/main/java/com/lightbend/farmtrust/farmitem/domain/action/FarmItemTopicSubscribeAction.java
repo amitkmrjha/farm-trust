@@ -20,7 +20,7 @@ public class FarmItemTopicSubscribeAction {
 
     @Handler
     public Empty catchOthers(Any event) {
-        LOG.debug("Subscribed: '{}' event  with id '{}' from topic.",event.getClass().getSimpleName(), "");
+        LOG.debug("Subscribed catchOthers: '{}' event  with id '{}' from topic.",event.getClass().getSimpleName(), "");
         return Empty.getDefaultInstance();
     }
 

@@ -5,6 +5,7 @@ import com.akkaserverless.javasdk.action.Action;
 import com.akkaserverless.javasdk.action.ActionContext;
 import com.akkaserverless.javasdk.action.Handler;
 import com.google.protobuf.Empty;
+import com.google.protobuf.Any;
 import com.lightbend.farmtrust.farmitem.FarmItemApi;
 import com.lightbend.farmtrust.farmitem.domain.FarmItemDomain;
 import org.slf4j.Logger;
@@ -46,6 +47,12 @@ public class FarmItemTopicAction {
                     ctx.serviceCallFactory().lookup(forwardTo, "CreateItem", FarmItemApi.CreateItemMessage.class);
             return Reply.forward(call.createCall(createMessage));
 
+    }
+
+    @Handler
+    public Reply<Empty> protobufFromTopicTest( Any message, ActionContext ctx) {
+        LOG.debug("TopicAction Test: '{}' event  with id '{}' from topic.",message.getClass().getSimpleName(), message.toString());
+        return Reply.message(Empty.getDefaultInstance());
     }
 
 }
