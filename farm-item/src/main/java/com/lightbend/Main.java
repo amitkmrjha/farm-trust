@@ -20,9 +20,9 @@ public final class Main {
                             FarmItemTopicSubscribeAction.class,
                             FarmItemEventSubscribeTopic.getDescriptor()
                                     .findServiceByName("FarmItemEventSubscriberService"))
-                    .registerAction(
+                    /*.registerAction(
                     FarmItemTopicAction.class,
-                    FarmItemTopic.getDescriptor().findServiceByName("FarmItemTopicService"));
+                    FarmItemTopic.getDescriptor().findServiceByName("FarmItemTopicService"))*/;
 
     public static void main(String[] args) throws Exception {
         LOG.info("starting the Akka Serverless service");

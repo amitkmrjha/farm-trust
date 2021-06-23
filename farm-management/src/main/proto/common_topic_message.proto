@@ -1,0 +1,23 @@
+// This is the public API offered by your entity.
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package com.lightbend.farmtrust;
+
+option java_outer_classname = "TopicMessage";
+
+message Message {
+    string operation = 1;
+    string farmLandId = 2 ;
+    int32 cycleNumber = 3;
+    string farmerName = 4;
+    string cropName = 5;
+    repeated string farmLog  = 6;
+    string unitItem = 7;
+    int32 quantity =  8;
+    string status = 9;
+}
