@@ -25,30 +25,3 @@ message FarmItemState {
     string boughtByUser = 8;
     double userRating = 9;
 }
-
-message HarvestStarted {
-    FarmLandState farmLandState = 1;
-}
-
-
-message FarmLandState {
-    string farm_land_id = 1 ;
-    int32 cycle_number = 2;
-    string farmer_name = 3;
-    string crop_name = 4;
-    repeated FarmLandEventLog farmLandEventLog = 5;
-    string unitItem = 6;
-    int32 quantity =  7;
-    string status = 8;
-}
-
-message FarmLandEventLog {
-    string farm_event_name = 1 ;
-    FarmLandLog log = 2;
-}
-
-message FarmLandLog {
-    string log_name = 1;
-    string log_info = 2;
-    google.protobuf.Timestamp timestamp = 3;
-}

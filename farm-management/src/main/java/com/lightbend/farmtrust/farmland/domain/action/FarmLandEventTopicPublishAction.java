@@ -11,6 +11,9 @@ import com.lightbend.farmtrust.farmland.domain.FarmLandDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,7 +46,10 @@ public class FarmLandEventTopicPublishAction {
             String logName = farmlandEventLog.getLog().getLogName();
             String logInfo = farmlandEventLog.getLog().getLogInfo();
             Timestamp timeStamp = farmlandEventLog.getLog().getTimestamp();
-            sb.append(timeStamp.toString()).append("~")
+            LocalDate localDate = Instant.ofEpochSecond(timeStamp.getSeconds(), timeStamp.getNanos())
+                    .atZone(ZoneId.of("America/Montreal"))
+                    .toLocalDate();
+            sb.append(localDate.toString()).append("~")
                     .append(eventName).append("~")
                     .append(logName).append("~")
                     .append(logInfo).append("~");
