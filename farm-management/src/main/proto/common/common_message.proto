@@ -1,0 +1,18 @@
+// This is the public API offered by your entity.
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package com.lightbend.farmtrust.common;
+
+option java_outer_classname = "CommonMessage";
+
+message FarmLandLog {
+    google.protobuf.Timestamp timestamp = 1;
+    string farm_event_name = 2 ;
+    string log_name = 3;
+    string log_info = 4;
+}

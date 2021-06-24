@@ -28,6 +28,13 @@ public class FarmItemIntegrationTest {
     }
     
     @Test
+    public void createMultipleItemsOnNonExistingEntity() throws Exception {
+        // TODO: set fields in command, and provide assertions to match replies
+        // client.createMultipleItems(FarmItemApi.CreateItemMessage.newBuilder().build())
+        //         .toCompletableFuture().get(2, SECONDS);
+    }
+    
+    @Test
     public void createItemOnNonExistingEntity() throws Exception {
         // TODO: set fields in command, and provide assertions to match replies
         // client.createItem(FarmItemApi.CreateItemMessage.newBuilder().build())

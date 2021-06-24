@@ -5,18 +5,19 @@ import "google/protobuf/empty.proto";
 import "akkaserverless/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "common/common_message.proto";
 
-package com.lightbend.farmtrust;
+package com.lightbend.farmtrust.common.topic;
 
-option java_outer_classname = "TopicMessage";
+option java_outer_classname = "FarmLandTopic";
 
-message Message {
+message FarmLandMessage {
     string operation = 1;
     string farmLandId = 2 ;
     int32 cycleNumber = 3;
     string farmerName = 4;
     string cropName = 5;
-    repeated string farmLog  = 6;
+    repeated common.FarmLandLog farmLandLog  = 6;
     string unitItem = 7;
     int32 quantity =  8;
     string status = 9;

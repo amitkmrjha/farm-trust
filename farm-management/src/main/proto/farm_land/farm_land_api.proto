@@ -5,6 +5,7 @@ import "google/protobuf/empty.proto";
 import "akkaserverless/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "common/common_message.proto";
 
 package com.lightbend.farmtrust.farmland;
 
@@ -68,21 +69,10 @@ message CurrentFarmLand {
     int32 cycle_number = 2;
     string farmer_name = 3;
     string crop_name = 4;
-    repeated FarmingProcessLog farmingProcessLog = 5;
+    repeated common.FarmLandLog farmLandLog = 5;
     string unitItem = 6;
     int32 quantity =  7;
     string farmStatus = 8;
-}
-
-message FarmingProcessLog {
-    string farm_event_name = 1 ;
-    ProcessLog log = 2;
-}
-
-message ProcessLog {
-    string log_name = 1;
-    string log_info = 2;
-    google.protobuf.Timestamp timestamp = 3;
 }
 
 service FarmlandService {

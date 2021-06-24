@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "akkaserverless/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "common/common_message.proto";
 
 package com.lightbend.farmtrust.farmitem.domain;
 
@@ -20,8 +21,9 @@ message FarmItemState {
     int32 cycle_number = 3;
     string farmer_name = 4;
     string crop_name = 5;
-    string logFromFarm = 6;
+    repeated common.FarmLandLog farmLandLog = 6;
     string itemStatus = 7;
     string boughtByUser = 8;
     double userRating = 9;
+    string unitItem = 10;
 }

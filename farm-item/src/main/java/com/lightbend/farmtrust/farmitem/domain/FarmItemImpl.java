@@ -40,8 +40,9 @@ public class FarmItemImpl extends FarmItemInterface {
                         .setFarmLandId(command.getFarmLandId())
                         .setCycleNumber(command.getCycleNumber())
                         .setCropName(command.getCropName())
-                        .setLogFromFarm(command.getLogFromFarm())
+                        .addAllFarmLandLog(command.getFarmLandLogList())
                         .setItemStatus(FarmItemStatus.AVAILABLE.name())
+                        .setUnitItem(command.getUnitItem())
                         .build();
         ctx.updateState(newState);
         return Empty.getDefaultInstance();
@@ -100,10 +101,11 @@ public class FarmItemImpl extends FarmItemInterface {
                 .setCycleNumber(state.getCycleNumber())
                 .setFarmerName(state.getFarmerName())
                 .setCropName(state.getCropName())
-                .setLogFromFarm(state.getLogFromFarm())
+                .addAllFarmLandLog(state.getFarmLandLogList())
                 .setItemStatus(state.getItemStatus())
                 .setBoughtByUser(state.getBoughtByUser())
                 .setUserRating(state.getUserRating())
+                .setUnitItem(state.getUnitItem())
                 .build();
     }
 

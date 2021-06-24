@@ -5,7 +5,7 @@ import com.akkaserverless.javasdk.action.Handler;
 import com.google.protobuf.Any;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
-import com.lightbend.farmtrust.TopicMessage;
+import com.lightbend.farmtrust.common.topic.FarmLandTopic;
 import com.lightbend.farmtrust.farmland.action.FarmLandEventPublishTopic;
 import com.lightbend.farmtrust.farmland.domain.FarmLandDomain;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class FarmLandEventTopicPublishAction {
     private static final Logger LOG = LoggerFactory.getLogger(FarmLandEventTopicPublishAction.class);
 
     @Handler
-    TopicMessage.Message publishHarvestStarted(FarmLandDomain.HarvestStarted event) {
+    FarmLandTopic.FarmLandMessage publishHarvestStarted(FarmLandDomain.HarvestStarted event) {
         LOG.info("Publishing: '{}' event  with id '{}'  cycle '{}' to topic.",
                 event.getClass().getSimpleName(),
                 event.getFarmLandState().getFarmLandId(),
@@ -38,24 +38,8 @@ public class FarmLandEventTopicPublishAction {
         return Empty.getDefaultInstance();
     }
 
-    private TopicMessage.Message convert(String eventType ,FarmLandDomain.FarmLandState state ) {
-
-        Stream<String> stringStream = state.getFarmLandEventLogList().stream().map(farmlandEventLog -> {
-            StringBuilder sb = new StringBuilder();
-            String eventName = farmlandEventLog.getFarmEventName();
-            String logName = farmlandEventLog.getLog().getLogName();
-            String logInfo = farmlandEventLog.getLog().getLogInfo();
-            Timestamp timeStamp = farmlandEventLog.getLog().getTimestamp();
-            LocalDate localDate = Instant.ofEpochSecond(timeStamp.getSeconds(), timeStamp.getNanos())
-                    .atZone(ZoneId.of("America/Montreal"))
-                    .toLocalDate();
-            sb.append(localDate.toString()).append("~")
-                    .append(eventName).append("~")
-                    .append(logName).append("~")
-                    .append(logInfo).append("~");
-            return sb.toString();
-        });
-        return  TopicMessage.Message.newBuilder()
+    private FarmLandTopic.FarmLandMessage convert(String eventType ,FarmLandDomain.FarmLandState state ) {
+        return  FarmLandTopic.FarmLandMessage.newBuilder()
                 .setOperation(eventType)
                 .setFarmLandId(state.getFarmLandId())
                 .setCycleNumber(state.getCycleNumber())
@@ -64,7 +48,7 @@ public class FarmLandEventTopicPublishAction {
                 .setUnitItem(state.getUnitItem())
                 .setQuantity(state.getQuantity())
                 .setStatus(state.getStatus())
-                .addAllFarmLog(stringStream.collect(Collectors.toSet()))
+                .addAllFarmLandLog(state.getFarmLandLogList())
                 .build();
     }
 

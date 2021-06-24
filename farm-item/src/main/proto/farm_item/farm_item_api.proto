@@ -4,6 +4,7 @@ import "google/protobuf/empty.proto";
 import "akkaserverless/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "common/common_message.proto";
 
 package com.lightbend.farmtrust.farmitem;
 
@@ -15,7 +16,8 @@ message CreateItemMessage {
   int32 cycle_number = 3;
   string farmer_name = 4;
   string crop_name = 5;
-  string logFromFarm = 6;
+  repeated common.FarmLandLog farmLandLog = 6;
+  string unitItem = 7;
 }
 
 message BuyItemMessage {
@@ -38,10 +40,11 @@ message ItemInfo {
   int32 cycle_number = 3;
   string farmer_name = 4;
   string crop_name = 5;
-  string logFromFarm = 6;
+  repeated common.FarmLandLog farmLandLog = 6;
   string itemStatus = 7;
   string boughtByUser = 8;
   double userRating = 9;
+  string unitItem = 10;
 }
 
 
@@ -50,7 +53,6 @@ service FarmItemService {
     type : SERVICE_TYPE_ENTITY
     component : ".domain.FarmItem"
   };
-
 
   rpc CreateItem(CreateItemMessage) returns (google.protobuf.Empty);
   rpc BuyItem(BuyItemMessage) returns (ItemInfo);

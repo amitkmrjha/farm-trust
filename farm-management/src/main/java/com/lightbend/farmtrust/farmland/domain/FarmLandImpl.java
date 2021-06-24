@@ -4,6 +4,7 @@ import com.akkaserverless.javasdk.EntityId;
 import com.akkaserverless.javasdk.eventsourcedentity.*;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
+import com.lightbend.farmtrust.common.CommonMessage;
 import com.lightbend.farmtrust.farmland.FarmLandApi;
 
 import java.util.HashMap;
@@ -48,14 +49,11 @@ public class FarmLandImpl extends FarmLandInterface {
         int newCycleNumber = this.farmLandState.getCycleNumber() +1;
         FarmLandStatus newStatus = FarmLandStatus.UNDER_FARMING;
 
-        FarmLandDomain.FarmLandEventLog farmLandEventLog =
-                FarmLandDomain.FarmLandEventLog.newBuilder()
+        CommonMessage.FarmLandLog farmLandEventLog =
+                CommonMessage.FarmLandLog.newBuilder()
+                        .setTimestamp(getCurrentSystemTimeStamp())
                         .setFarmEventName("CropSeasonStarted")
-                        .setLog(
-                                FarmLandDomain.FarmLandLog.newBuilder()
-                                        .setTimestamp(getCurrentSystemTimeStamp())
-                                        .build()
-                        ).build();
+                        .build();
 
         FarmLandDomain.FarmLandState newState =
                 FarmLandDomain.FarmLandState.newBuilder().mergeFrom(this.farmLandState)
@@ -63,7 +61,7 @@ public class FarmLandImpl extends FarmLandInterface {
                         .setCycleNumber(newCycleNumber)
                         .setFarmerName(command.getFarmerName())
                         .setCropName(command.getCropName())
-                        .addFarmLandEventLog(farmLandEventLog)
+                        .addFarmLandLog(farmLandEventLog)
                         .setStatus(newStatus.name())
                         .build();
 
@@ -86,21 +84,18 @@ public class FarmLandImpl extends FarmLandInterface {
         if(!farmLandState.getStatus().equals(FarmLandImpl.FarmLandStatus.UNDER_FARMING.name())){
             throw ctx.fail(logStateInfo());
         }
-        FarmLandDomain.FarmLandEventLog farmLandEventLog =
-                FarmLandDomain.FarmLandEventLog.newBuilder()
+        CommonMessage.FarmLandLog farmLandEventLog =
+                CommonMessage.FarmLandLog.newBuilder()
+                        .setTimestamp(getCurrentSystemTimeStamp())
                         .setFarmEventName("SoilPreparationStarted")
-                        .setLog(
-                                FarmLandDomain.FarmLandLog.newBuilder()
-                                        .setLogName("weather_info")
-                                        .setLogInfo(command.getWeatherInfo())
-                                        .setTimestamp(getCurrentSystemTimeStamp())
-                                        .build()
-                        ).build();
+                        .setLogName("weather_info")
+                        .setLogInfo(command.getWeatherInfo())
+                        .build();
 
         FarmLandDomain.FarmLandState newState =
                 FarmLandDomain.FarmLandState.newBuilder()
                         .mergeFrom(this.farmLandState)
-                        .addFarmLandEventLog(farmLandEventLog).build();
+                        .addFarmLandLog(farmLandEventLog).build();
 
         ctx.emit(
                 FarmLandDomain.SoilPreparationStarted.newBuilder()
@@ -122,20 +117,17 @@ public class FarmLandImpl extends FarmLandInterface {
             throw ctx.fail(logStateInfo());
         }
 
-        FarmLandDomain.FarmLandEventLog farmLandEventLog =
-                FarmLandDomain.FarmLandEventLog.newBuilder()
+        CommonMessage.FarmLandLog farmLandEventLog =
+                CommonMessage.FarmLandLog.newBuilder()
+                        .setTimestamp(getCurrentSystemTimeStamp())
                         .setFarmEventName("SeedingStarted")
-                        .setLog(
-                                FarmLandDomain.FarmLandLog.newBuilder()
-                                        .setLogName("seed_info")
-                                        .setLogInfo(command.getSeedInfo())
-                                        .setTimestamp(getCurrentSystemTimeStamp())
-                                        .build()
-                        ).build();
+                        .setLogName("seed_info")
+                        .setLogInfo(command.getSeedInfo())
+                        .build();
         FarmLandDomain.FarmLandState newState =
                 FarmLandDomain.FarmLandState.newBuilder()
                         .mergeFrom(this.farmLandState)
-                        .addFarmLandEventLog(farmLandEventLog).build();
+                        .addFarmLandLog(farmLandEventLog).build();
         ctx.emit(
                 FarmLandDomain.SeedingStarted.newBuilder()
                         .setFarmLandState(newState)
@@ -156,20 +148,16 @@ public class FarmLandImpl extends FarmLandInterface {
             throw ctx.fail(logStateInfo());
         }
 
-        FarmLandDomain.FarmLandEventLog farmLandEventLog =
-                FarmLandDomain.FarmLandEventLog.newBuilder()
+        CommonMessage.FarmLandLog farmLandEventLog =
+                CommonMessage.FarmLandLog.newBuilder()
+                        .setTimestamp(getCurrentSystemTimeStamp())
                         .setFarmEventName("PlantingStarted")
-                        .setLog(
-                                FarmLandDomain.FarmLandLog.newBuilder()
-                                        .setLogName("plant_info")
-                                        .setLogInfo(command.getPlantInfo())
-                                        .setTimestamp(getCurrentSystemTimeStamp())
-                                        .build()
-                        ).build();
+                        .setLogName("plant_info")
+                        .setLogInfo(command.getPlantInfo()).build();
         FarmLandDomain.FarmLandState newState =
                 FarmLandDomain.FarmLandState.newBuilder()
                         .mergeFrom(this.farmLandState)
-                        .addFarmLandEventLog(farmLandEventLog).build();
+                        .addFarmLandLog(farmLandEventLog).build();
         ctx.emit(
                 FarmLandDomain.PlantingStarted.newBuilder()
                         .setFarmLandState(newState)
@@ -197,17 +185,14 @@ public class FarmLandImpl extends FarmLandInterface {
         FarmLandDomain.FarmLandState newState =
                 FarmLandDomain.FarmLandState.newBuilder()
                         .mergeFrom(this.farmLandState)
-                        .addAllFarmLandEventLog(
+                        .addAllFarmLandLog(
                                 eventLogMap.entrySet().stream().map(entryS ->
-                                        FarmLandDomain.FarmLandEventLog.newBuilder()
+                                        CommonMessage.FarmLandLog.newBuilder()
+                                                .setTimestamp(getCurrentSystemTimeStamp())
                                                 .setFarmEventName("CaringStarted")
-                                                .setLog(
-                                                        FarmLandDomain.FarmLandLog.newBuilder()
-                                                                .setLogName(entryS.getKey())
-                                                                .setLogInfo(entryS.getValue())
-                                                                .setTimestamp(getCurrentSystemTimeStamp())
-                                                                .build()
-                                                ).build()
+                                                .setLogName(entryS.getKey())
+                                                .setLogInfo(entryS.getValue())
+                                                .build()
                                 ).collect(Collectors.toSet())
                         ).build();
         ctx.emit(
@@ -228,20 +213,17 @@ public class FarmLandImpl extends FarmLandInterface {
             throw ctx.fail(logStateInfo());
         }
 
-        FarmLandDomain.FarmLandEventLog farmLandEventLog =
-                FarmLandDomain.FarmLandEventLog.newBuilder()
+        CommonMessage.FarmLandLog farmLandEventLog =
+                CommonMessage.FarmLandLog.newBuilder()
+                        .setTimestamp(getCurrentSystemTimeStamp())
                         .setFarmEventName("HealthCheckUpStarted")
-                        .setLog(
-                                FarmLandDomain.FarmLandLog.newBuilder()
-                                        .setLogName("health_check_report")
-                                        .setLogInfo(command.getHealthCheckReport())
-                                        .setTimestamp(getCurrentSystemTimeStamp())
-                                        .build()
-                        ).build();
+                        .setLogName("health_check_report")
+                        .setLogInfo(command.getHealthCheckReport())
+                        .build();
         FarmLandDomain.FarmLandState newState =
                 FarmLandDomain.FarmLandState.newBuilder()
                         .mergeFrom(this.farmLandState)
-                        .addFarmLandEventLog(farmLandEventLog).build();
+                        .addFarmLandLog(farmLandEventLog).build();
 
         ctx.emit(
                 FarmLandDomain.HealthCheckUpStarted.newBuilder()
@@ -260,20 +242,17 @@ public class FarmLandImpl extends FarmLandInterface {
         if(!farmLandState.getStatus().equals(FarmLandImpl.FarmLandStatus.UNDER_FARMING.name())){
             throw ctx.fail(logStateInfo());
         }
-        FarmLandDomain.FarmLandEventLog farmLandEventLog =
-                FarmLandDomain.FarmLandEventLog.newBuilder()
+        CommonMessage.FarmLandLog farmLandEventLog =
+                CommonMessage.FarmLandLog.newBuilder()
+                        .setTimestamp(getCurrentSystemTimeStamp())
                         .setFarmEventName("PestAndDiseaseControlStarted")
-                        .setLog(
-                                FarmLandDomain.FarmLandLog.newBuilder()
-                                        .setLogName("action_report")
-                                        .setLogInfo(command.getActionReport())
-                                        .setTimestamp(getCurrentSystemTimeStamp())
-                                        .build()
-                        ).build();
+                        .setLogName("action_report")
+                        .setLogInfo(command.getActionReport())
+                        .build();
         FarmLandDomain.FarmLandState newState =
                 FarmLandDomain.FarmLandState.newBuilder()
                         .mergeFrom(this.farmLandState)
-                        .addFarmLandEventLog(farmLandEventLog).build();
+                        .addFarmLandLog(farmLandEventLog).build();
 
         ctx.emit(
                 FarmLandDomain.PestAndDiseaseControlStarted.newBuilder()
@@ -293,21 +272,18 @@ public class FarmLandImpl extends FarmLandInterface {
             throw ctx.fail(logStateInfo());
         }
 
-        FarmLandDomain.FarmLandEventLog farmLandEventLog =
-                FarmLandDomain.FarmLandEventLog.newBuilder()
+        CommonMessage.FarmLandLog farmLandEventLog =
+                CommonMessage.FarmLandLog.newBuilder()
+                        .setTimestamp(getCurrentSystemTimeStamp())
                         .setFarmEventName("HarvestStarted")
-                        .setLog(
-                                FarmLandDomain.FarmLandLog.newBuilder()
-                                        .setTimestamp(getCurrentSystemTimeStamp())
-                                        .build()
-                        ).build();
+                        .build();
 
         FarmLandDomain.FarmLandState newState =
                 FarmLandDomain.FarmLandState.newBuilder()
                         .mergeFrom(this.farmLandState)
                         .setUnitItem(command.getUnitItem())
                         .setQuantity(command.getQuantity())
-                        .addFarmLandEventLog(farmLandEventLog).build();
+                        .addFarmLandLog(farmLandEventLog).build();
 
         ctx.emit(
                 FarmLandDomain.HarvestStarted.newBuilder()
@@ -326,14 +302,11 @@ public class FarmLandImpl extends FarmLandInterface {
         if(!farmLandState.getStatus().equals(FarmLandImpl.FarmLandStatus.UNDER_FARMING.name())){
             throw ctx.fail(logStateInfo());
         }
-        FarmLandDomain.FarmLandEventLog farmLandEventLog =
-                FarmLandDomain.FarmLandEventLog.newBuilder()
+        CommonMessage.FarmLandLog farmLandEventLog =
+                CommonMessage.FarmLandLog.newBuilder()
+                        .setTimestamp(getCurrentSystemTimeStamp())
                         .setFarmEventName("CropSeasonFinished")
-                        .setLog(
-                                FarmLandDomain.FarmLandLog.newBuilder()
-                                        .setTimestamp(getCurrentSystemTimeStamp())
-                                        .build()
-                        ).build();
+                        .build();
 
         FarmLandDomain.FarmLandState newState =
                 FarmLandDomain.FarmLandState.newBuilder()
@@ -360,26 +333,13 @@ public class FarmLandImpl extends FarmLandInterface {
     }
 
     private FarmLandApi.CurrentFarmLand convert(FarmLandDomain.FarmLandState farmState) {
-        Set<FarmLandApi.FarmingProcessLog> farmingProcessLog =
-                farmState.getFarmLandEventLogList().stream().map(farmLandEventLog ->
-                        FarmLandApi.FarmingProcessLog.newBuilder()
-                                .setFarmEventName(farmLandEventLog.getFarmEventName())
-                                .setLog(
-                                        FarmLandApi.ProcessLog.newBuilder()
-                                                .setLogName(farmLandEventLog.getLog().getLogName())
-                                                .setLogInfo(farmLandEventLog.getLog().getLogInfo())
-                                                .setTimestamp(farmLandEventLog.getLog().getTimestamp())
-                                                .build()
-                                )
-                                .build()
-                ).collect(Collectors.toSet());
 
         return FarmLandApi.CurrentFarmLand.newBuilder()
                 .setFarmLandId(farmState.getFarmLandId())
                 .setCycleNumber(farmState.getCycleNumber())
                 .setFarmerName(farmState.getFarmerName())
                 .setCropName(farmState.getCropName())
-                .addAllFarmingProcessLog(farmingProcessLog)
+                .addAllFarmLandLog(farmState.getFarmLandLogList())
                 .setUnitItem(farmState.getUnitItem())
                 .setQuantity(farmState.getQuantity())
                 .setFarmStatus(farmState.getStatus())

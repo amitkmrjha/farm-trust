@@ -5,7 +5,7 @@ package com.lightbend.farmtrust.farmland.action;
 import "akkaserverless/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "farm_land/farm_land_domain.proto";
-import "common_topic_message.proto";
+import "common/topic/farm_land_topic_message.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/empty.proto";
@@ -13,7 +13,7 @@ import "google/protobuf/empty.proto";
 option java_outer_classname = "FarmLandEventPublishTopic";
 
 service EventToTopicPublisherService {
-    rpc PublishHarvestStarted(domain.HarvestStarted) returns (Message) {
+    rpc PublishHarvestStarted(domain.HarvestStarted) returns (common.topic.FarmLandMessage) {
         option (akkaserverless.method).eventing = {
             in: {
                 event_sourced_entity: "farmland"
