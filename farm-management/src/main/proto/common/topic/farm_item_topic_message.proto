@@ -1,0 +1,18 @@
+// This is the public API offered by your entity.
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "common/common_message.proto";
+
+package com.lightbend.farmtrust.common.topic;
+
+option java_outer_classname = "FarmItemTopic";
+
+message LandRatingMessage {
+    string farmLandId = 1 ;
+    double rating = 2;
+
+}

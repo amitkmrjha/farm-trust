@@ -82,6 +82,13 @@ public class FarmLandViewTransform {
         return event.getFarmLandState();
     }
 
+    @UpdateHandler
+    public FarmLandDomain.FarmLandState processRatingAdded(
+            FarmLandDomain.RatingAdded event, FarmLandDomain.FarmLandState state) {
+        logEvent(event.getClass().getSimpleName(),event.getFarmLandState());
+        return event.getFarmLandState();
+    }
+
     private void logEvent(String eventName, FarmLandDomain.FarmLandState state ) {
         LOG.debug("processing event ["+ eventName + "] entity id  = ["+ state.getFarmLandId()+"].");
     }

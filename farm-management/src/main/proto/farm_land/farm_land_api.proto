@@ -60,6 +60,11 @@ message FinishCropSeasonMessage {
     string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
 }
 
+message AddLandRatingMessage {
+    string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
+    double rating = 2;
+}
+
 message GetFarmLandMessage {
     string farm_land_id = 1 [(akkaserverless.field).entity_key = true];
 }
@@ -73,6 +78,7 @@ message CurrentFarmLand {
     string unitItem = 6;
     int32 quantity =  7;
     string farmStatus = 8;
+    double rating = 9;
 }
 
 service FarmlandService {
@@ -90,5 +96,6 @@ service FarmlandService {
     rpc PestAndDiseaseControl(PestAndDiseaseControlMessage) returns (google.protobuf.Empty);
     rpc Harvest(HarvestMessage) returns (google.protobuf.Empty);
     rpc FinishCropSeason(FinishCropSeasonMessage) returns (google.protobuf.Empty);
+    rpc AddLandRating(AddLandRatingMessage) returns (google.protobuf.Empty);
     rpc GetFarmLand(GetFarmLandMessage) returns (CurrentFarmLand);
 }

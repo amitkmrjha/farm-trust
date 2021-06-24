@@ -160,6 +160,22 @@ public class FarmLandTest {
     }
     
     @Test
+    public void addLandRatingTest() {
+        entity = new FarmLandImpl(entityId);
+        
+        Mockito.when(context.fail("The command handler for `AddLandRating` is not implemented, yet"))
+            .thenReturn(new MockedContextFailure());
+        
+        // TODO: set fields in command, and update assertions to match implementation
+        assertThrows(MockedContextFailure.class, () -> {
+            entity.addLandRatingWithReply(FarmLandApi.AddLandRatingMessage.newBuilder().build(), context);
+        });
+        
+        // TODO: if you wish to verify events:
+        //    Mockito.verify(context).emit(event);
+    }
+    
+    @Test
     public void getFarmLandTest() {
         entity = new FarmLandImpl(entityId);
         

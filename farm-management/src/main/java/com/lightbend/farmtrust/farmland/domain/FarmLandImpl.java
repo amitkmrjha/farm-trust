@@ -6,6 +6,9 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 import com.lightbend.farmtrust.common.CommonMessage;
 import com.lightbend.farmtrust.farmland.FarmLandApi;
+import com.lightbend.farmtrust.farmland.domain.query.FarmLandViewTransform;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -14,6 +17,8 @@ import java.util.stream.Collectors;
 /** An event sourced entity. */
 @EventSourcedEntity(entityType = "farmland")
 public class FarmLandImpl extends FarmLandInterface {
+
+    private static final Logger LOG = LoggerFactory.getLogger(FarmLandImpl.class);
 
     enum FarmLandStatus {
         UNDER_FARMING,
@@ -26,6 +31,7 @@ public class FarmLandImpl extends FarmLandInterface {
             FarmLandDomain.FarmLandState.newBuilder()
                     .setCycleNumber(0)
                     .setStatus(com.lightbend.farmtrust.farmland.domain.FarmLandImpl.FarmLandStatus.IDLE.name())
+                    .setNumberOfRating(0)
                     .build();
     public FarmLandImpl(@EntityId String entityId) {
         this.entityId = entityId;
@@ -313,6 +319,8 @@ public class FarmLandImpl extends FarmLandInterface {
                         .mergeFrom(FarmLandDomain.FarmLandState.getDefaultInstance())
                         .setCycleNumber(this.farmLandState.getCycleNumber())
                         .setStatus(FarmLandImpl.FarmLandStatus.IDLE.name())
+                        .setRating(this.farmLandState.getRating())
+                        .setNumberOfRating(this.farmLandState.getNumberOfRating())
                         .build();
 
         ctx.emit(
@@ -324,6 +332,30 @@ public class FarmLandImpl extends FarmLandInterface {
 
     @Override
     public void cropSeasonFinished(FarmLandDomain.CropSeasonFinished event) {
+        this.farmLandState = event.getFarmLandState();
+    }
+
+    @Override
+    protected Empty addLandRating(FarmLandApi.AddLandRatingMessage command, CommandContext ctx) {
+        Double currentRating = this.farmLandState.getRating();
+        int numberOfRating = this.farmLandState.getNumberOfRating();
+
+        Double newRating = approxRollingAverage(currentRating,numberOfRating,command.getRating());
+        FarmLandDomain.FarmLandState newState =
+                FarmLandDomain.FarmLandState.newBuilder()
+                        .mergeFrom(this.farmLandState)
+                        .setRating(newRating)
+                        .setNumberOfRating(numberOfRating+1)
+                        .build();
+        ctx.emit(
+                FarmLandDomain.RatingAdded.newBuilder()
+                        .setFarmLandState(newState)
+                        .build());
+        return Empty.getDefaultInstance();
+    }
+
+    @Override
+    public void ratingAdded(FarmLandDomain.RatingAdded event) {
         this.farmLandState = event.getFarmLandState();
     }
 
@@ -343,6 +375,7 @@ public class FarmLandImpl extends FarmLandInterface {
                 .setUnitItem(farmState.getUnitItem())
                 .setQuantity(farmState.getQuantity())
                 .setFarmStatus(farmState.getStatus())
+                .setRating(farmState.getRating())
                 .build();
 
     }
@@ -355,5 +388,14 @@ public class FarmLandImpl extends FarmLandInterface {
 
     private String logStateInfo() {
         return "Status of farm land " + this.entityId+ " cycle ["+this.farmLandState.getCycleNumber()+"] is "+this.farmLandState.getStatus()+".";
+    }
+
+    private double approxRollingAverage (double average,int currentCount, double newRating) {
+        LOG.debug("average '{}' currentCount '{}' newRating '{}' ",average,currentCount,newRating);
+        Double newSum = (average*currentCount) + newRating;
+        LOG.debug("newSum '{}' ",newSum);
+       Double  newAverage  = newSum/(currentCount+1);
+        LOG.debug("newAverage '{}' ",newAverage);
+       return newAverage;
     }
 }

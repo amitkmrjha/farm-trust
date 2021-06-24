@@ -104,6 +104,16 @@ service FarmLandByCropNameView {
         };
     }
 
+    rpc ProcessRatingAdded(domain.RatingAdded) returns (domain.FarmLandState) {
+        option (akkaserverless.method).eventing.in = {
+            event_sourced_entity: "farmland"
+        };
+        option (akkaserverless.method).view.update = {
+            table: "farmland"
+            transform_updates: true
+        };
+    }
+
     rpc GetFarmLandByCropName(FarmLandQueryByCropName) returns (stream domain.FarmLandState) {
         option (akkaserverless.method).view.query = {
             query: "SELECT * FROM farmland WHERE crop_name = :crop_name"

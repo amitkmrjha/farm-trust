@@ -44,6 +44,10 @@ message CropSeasonFinished {
     FarmLandState farmLandState = 1;
 }
 
+message RatingAdded {
+    FarmLandState farmLandState = 1;
+}
+
 
 option (akkaserverless.file).event_sourced_entity = {
     name: "FarmLand"
@@ -51,7 +55,7 @@ option (akkaserverless.file).event_sourced_entity = {
     state: "FarmLandState"
     events: ["CropSeasonStarted", "SoilPreparationStarted", "SeedingStarted",
         "PlantingStarted", "CaringStarted", "HealthCheckUpStarted", "PestAndDiseaseControlStarted",
-        "HarvestStarted", "CropSeasonFinished"]
+        "HarvestStarted", "CropSeasonFinished","RatingAdded"]
 };
 
 message FarmLandState {
@@ -63,5 +67,7 @@ message FarmLandState {
     string unitItem = 6;
     int32 quantity =  7;
     string status = 8;
+    double rating = 9;
+    int32  numberOfRating = 10;
 }
 

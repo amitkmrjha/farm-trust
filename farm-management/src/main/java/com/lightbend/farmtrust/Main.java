@@ -2,8 +2,10 @@ package com.lightbend.farmtrust;
 
 import com.akkaserverless.javasdk.AkkaServerless;
 import com.lightbend.farmtrust.farmland.action.FarmLandEventPublishTopic;
+import com.lightbend.farmtrust.farmland.action.FarmLandSubscribeTopic;
 import com.lightbend.farmtrust.farmland.domain.FarmLandDomain;
 import com.lightbend.farmtrust.farmland.domain.action.FarmLandEventTopicPublishAction;
+import com.lightbend.farmtrust.farmland.domain.action.FarmLandTopicSubscribeAction;
 import com.lightbend.farmtrust.farmland.domain.query.FarmLandViewTransform;
 import com.lightbend.farmtrust.farmland.view.FarmLandViewByCropModel;
 import com.lightbend.farmtrust.farmland.view.FarmLandViewByFarmerModel;
@@ -31,7 +33,11 @@ public final class Main {
                    ).registerAction(
                             FarmLandEventTopicPublishAction.class,
                             FarmLandEventPublishTopic.getDescriptor()
-                            .findServiceByName("EventToTopicPublisherService"));
+                            .findServiceByName("EventToTopicPublisherService")
+                   ).registerAction(
+                    FarmLandTopicSubscribeAction.class,
+                    FarmLandSubscribeTopic.getDescriptor()
+                                .findServiceByName("FarmLandSubscribeService"));
 
     
     public static void main(String[] args) throws Exception {

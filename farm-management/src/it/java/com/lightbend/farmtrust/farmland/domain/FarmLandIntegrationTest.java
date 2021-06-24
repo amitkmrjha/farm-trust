@@ -91,6 +91,13 @@ public class FarmLandIntegrationTest {
     }
     
     @Test
+    public void addLandRatingOnNonExistingEntity() throws Exception {
+        // TODO: set fields in command, and provide assertions to match replies
+        // client.addLandRating(FarmLandApi.AddLandRatingMessage.newBuilder().build())
+        //         .toCompletableFuture().get(2, SECONDS);
+    }
+    
+    @Test
     public void getFarmLandOnNonExistingEntity() throws Exception {
         // TODO: set fields in command, and provide assertions to match replies
         // client.getFarmLand(FarmLandApi.GetFarmLandMessage.newBuilder().build())
