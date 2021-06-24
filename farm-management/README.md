@@ -172,6 +172,87 @@ grpcurl \
 > Note: The failure is to be expected if you have not yet provided an implementation of `GetCurrentCounter` in
 > your entity.
 
+```shell
+mvn compile exec:java
+
+
+gcloud projects list
+gcloud config set project lbamitpubsub
+
+gcloud iam service-accounts create akka-serverless-broker
+
+
+
+
+gcloud iam service-accounts create lbamitpubsub-akkasls-broker
+
+
+
+gcloud projects add-iam-policy-binding plenary-edition-288205 \
+    --member "serviceAccount:lb-amitkumar-akkasls-broker@plenary-edition-288205.iam.gserviceaccount.com" \
+    --role "roles/pubsub.editor"
+
+lb-amitkumar-akkasls-broker@plenary-edition-288205.iam.gserviceaccount.com
+
+
+akkasls project set broker --broker-service gcp-pubsub  --gcp-key-file lbamitpubsub-0273f7aba63a-Key.json
+
+
+gcloud iam service-accounts keys create lb-amitkumar-akkasls-broker-keyfile.json \
+    --iam-account lb-amitkumar-akkasls-broker@plenary-edition-288205.iam.gserviceaccount.com
+
+gcloud beta emulators pubsub start --project=akkasls-pubsub-demo
+
+mvn clean install -DskipTests
+docker push amitjha12/farm-management:LATEST
+docker push amitjha12/farm-item:LATEST
+
+akkasls config set project farm-trust
+
+akkasls services deploy farm-management amitjha12/farm-management:LATEST
+akkasls services deploy farm-item amitjha12/farm-item:LATEST
+
+akkasls svc expose farm-item --enable-cors
+akkasls svc expose farm-management --enable-cors
+
+
+git clone https://github.com/googleapis/python-pubsub.git
+cd python-pubsub/samples/snippets
+pip install -r requirements.txt
+$(gcloud beta emulators pubsub env-init)
+python3 publisher.py test create farm-land-events
+
+python3 publisher.py test list 
+
+python3 subscriber.py test create farm-land-events sub1
+python3 subscriber.py test receive sub1
+python3 publisher.py test publish farm-land-events
+
+
+export PUBSUB_EMULATOR_HOST=localhost:8085
+export PUBSUB_PROJECT_ID=test
+
+
+curl http://localhost:8085
+
+server.port=8090
+
+-Dconfig.file=/home/demiourgos728/dev-mode-amit.conf
+
+
+/home/demiourgos728/dev-mode-amit.conf
+
+
+akkasls auth login --host api.akkaserverless.io:443
+akkasls config set project farm-trust
+
+PUBSUB_EMULATOR_HOST=localhost:8432
+
+
+environment:
+      PUBSUB_EMULATOR_HOST: http://${DOCKER_GATEWAY_HOST:-host.docker.internal}:8085
+```
+
 
 ## Deploying
 
