@@ -58,10 +58,57 @@ The command handler for `GetCurrentCounter` is not implemented, yet
 For example, given [`grpcurl`](https://github.com/fullstorydev/grpcurl):
 
 ```shell
-> grpcurl -plaintext -d '{"counterId": "foo"}' localhost:9000 com.lightbend.CounterService/GetCurrentCounter 
-ERROR:
-  Code: Unknown
-  Message: The command handler for `GetCurrentCounter` is not implemented, yet
+> grpcurl \
+-d '{"item_id": "mango1234","farm_land_id": "FarmLandinbangalore1234","crop_name": "mango","farmer_name": "Farmer123","logFromFarm": "Awesome organic farming"}' \
+-plaintext localhost:9000 com.lightbend.farmtrust.farmitem.FarmItemService/CreateItem
+
+
+grpcurl \
+-d '{"item_id": "mango1234"}' \
+-plaintext localhost:9000 com.lightbend.farmtrust.farmitem.FarmItemService/GetItem
+
+grpcurl \
+-d '{"item_id": "mango1234", "user_name": "amit123"}' \
+-plaintext localhost:9000 com.lightbend.farmtrust.farmitem.FarmItemService/BuyItem
+
+grpcurl \
+-d '{"item_id": "mango1234", "rating": 3.5}' \
+-plaintext localhost:9000 com.lightbend.farmtrust.farmitem.FarmItemService/RateItem
+
+
+
+grpcurl \
+-d '{"item_id": "FarmLandinbangalore1234-1-2"}' \
+-plaintext localhost:9010 com.lightbend.farmtrust.farmitem.FarmItemService/GetItem
+
+
+grpcurl \
+-d '{"item_id": "FarmLandinbangalore1234-1-2","farm_land_id": "FarmLandinbangalore1234","crop_name": "mango","farmer_name": "Farmer123"}' \
+-plaintext localhost:9010 com.lightbend.farmtrust.farmitem.FarmItemService/CreateItem
+
+grpcurl \
+-d '{"item_id": "FarmLandinbangalore1234-1-2", "user_name": "amit123"}' \
+-plaintext localhost:9010 com.lightbend.farmtrust.farmitem.FarmItemService/BuyItem
+
+grpcurl \
+-d '{"item_id": "FarmLandinbangalore1234-1-2", "rating": 3.5}' \
+-plaintext localhost:9010 com.lightbend.farmtrust.farmitem.FarmItemService/RateItem
+
+grpcurl \
+-d '{"farm_land_id": "FarmLandinbangalore1234", "itemStatus": "AVAILABLE"}' \
+-plaintext localhost:9010 com.lightbend.farmtrust.farmitem.view.FarmItemByFarmLand/GetFarmItem
+
+grpcurl \
+-d '{"farmer_name": "Farmer123", "itemStatus": "AVAILABLE"}' \
+-plaintext localhost:9010 com.lightbend.farmtrust.farmitem.view.FarmItemByFarmer/GetFarmItem
+
+grpcurl \
+-d '{"crop_name": "mango", "itemStatus": "AVAILABLE"}' \
+-plaintext localhost:9010 com.lightbend.farmtrust.farmitem.view.FarmItemByCrop/GetFarmItem
+
+grpcurl \
+-d '{"boughtByUser": "amit123"}' \
+-plaintext localhost:9010 com.lightbend.farmtrust.farmitem.view.FarmItemBySoldUser/GetFarmItem
 ```
 
 > Note: The failure is to be expected if you have not yet provided an implementation of `GetCurrentCounter` in

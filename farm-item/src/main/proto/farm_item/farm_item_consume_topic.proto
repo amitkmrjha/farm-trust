@@ -18,5 +18,4 @@ service FarmItemEventSubscriberService {
             topic: "farm-land-events"
         };
     }
-
 }

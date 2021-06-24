@@ -3,8 +3,10 @@ package com.lightbend;
 import com.akkaserverless.javasdk.AkkaServerless;
 import com.lightbend.farmtrust.farmitem.action.FarmItemEventSubscribeTopic;
 import com.lightbend.farmtrust.farmitem.action.FarmItemPublishTopic;
+import com.lightbend.farmtrust.farmitem.domain.FarmItemDomain;
 import com.lightbend.farmtrust.farmitem.domain.action.FarmItemTopicPublishAction;
 import com.lightbend.farmtrust.farmitem.domain.action.FarmItemTopicSubscribeAction;
+import com.lightbend.farmtrust.farmitem.view.FarmItemViewModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +25,24 @@ public final class Main {
                     .registerAction(
                             FarmItemTopicPublishAction.class,
                             FarmItemPublishTopic.getDescriptor()
-                                    .findServiceByName("FarmItemPublishService"));
+                                    .findServiceByName("FarmItemPublishService"))
+                    .registerView(
+                            FarmItemViewModel.getDescriptor().findServiceByName("FarmItemByFarmLand"),
+                            "FarmItemByFarmLand",
+                            FarmItemDomain.getDescriptor())
+                    .registerView(
+                            FarmItemViewModel.getDescriptor().findServiceByName("FarmItemByFarmer"),
+                            "FarmItemByFarmer",
+                            FarmItemDomain.getDescriptor())
+                    .registerView(
+                            FarmItemViewModel.getDescriptor().findServiceByName("FarmItemByCrop"),
+                            "FarmItemByCrop",
+                            FarmItemDomain.getDescriptor())
+                    .registerView(
+                            FarmItemViewModel.getDescriptor().findServiceByName("FarmItemBySoldUser"),
+                            "FarmItemBySoldUser",
+                            FarmItemDomain.getDescriptor());
+
 
     public static void main(String[] args) throws Exception {
         LOG.info("starting the Akka Serverless service");

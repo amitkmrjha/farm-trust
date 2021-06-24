@@ -10,6 +10,8 @@ import com.lightbend.farmtrust.farmland.domain.query.FarmLandViewTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -375,7 +377,7 @@ public class FarmLandImpl extends FarmLandInterface {
                 .setUnitItem(farmState.getUnitItem())
                 .setQuantity(farmState.getQuantity())
                 .setFarmStatus(farmState.getStatus())
-                .setRating(farmState.getRating())
+                .setRating(round(farmState.getRating(),2))
                 .build();
 
     }
@@ -397,5 +399,12 @@ public class FarmLandImpl extends FarmLandInterface {
        Double  newAverage  = newSum/(currentCount+1);
         LOG.debug("newAverage '{}' ",newAverage);
        return newAverage;
+    }
+
+    public double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }

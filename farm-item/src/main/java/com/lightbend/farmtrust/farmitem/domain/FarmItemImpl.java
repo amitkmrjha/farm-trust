@@ -39,6 +39,7 @@ public class FarmItemImpl extends FarmItemInterface {
                         .setItemId(this.entityId)
                         .setFarmLandId(command.getFarmLandId())
                         .setCycleNumber(command.getCycleNumber())
+                        .setFarmerName(command.getFarmerName())
                         .setCropName(command.getCropName())
                         .addAllFarmLandLog(command.getFarmLandLogList())
                         .setItemStatus(FarmItemStatus.AVAILABLE.name())

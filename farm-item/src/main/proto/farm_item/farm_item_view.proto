@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package com.lightbend.farmtrust.farmitem.view;
+
+option java_outer_classname = "FarmItemViewModel";
+
+import "farm_item/farm_item_domain.proto";
+import "akkaserverless/annotations.proto";
+
+service FarmItemByFarmLand {
+  rpc UpdateFarmItem(domain.FarmItemState) returns (domain.FarmItemState) {
+    option (akkaserverless.method).eventing.in = {
+      value_entity: "farmitem"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "farmitem"
+    };
+  }
+
+  rpc GetFarmItem(ByFarmLandRequest) returns (stream domain.FarmItemState) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * FROM farmitem WHERE farm_land_id = :farm_land_id AND itemStatus = :itemStatus"
+    };
+  }
+}
+
+message ByFarmLandRequest {
+  string farm_land_id = 1;
+  string itemStatus = 2;
+}
+
+
+service FarmItemByFarmer {
+  rpc UpdateFarmItem(domain.FarmItemState) returns (domain.FarmItemState) {
+    option (akkaserverless.method).eventing.in = {
+      value_entity: "farmitem"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "farmitem"
+    };
+  }
+
+  rpc GetFarmItem(ByFarmerRequest) returns (stream domain.FarmItemState) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * FROM farmitem WHERE farmer_name = :farmer_name AND itemStatus = :itemStatus"
+    };
+  }
+}
+
+message ByFarmerRequest {
+  string farmer_name = 1;
+  string itemStatus = 2;
+}
+
+service FarmItemByCrop {
+  rpc UpdateFarmItem(domain.FarmItemState) returns (domain.FarmItemState) {
+    option (akkaserverless.method).eventing.in = {
+      value_entity: "farmitem"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "farmitem"
+    };
+  }
+
+  rpc GetFarmItem(ByCropRequest) returns (stream domain.FarmItemState) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * FROM farmitem WHERE crop_name = :crop_name AND itemStatus = :itemStatus"
+    };
+  }
+}
+
+message ByCropRequest {
+  string crop_name = 1;
+  string itemStatus = 2;
+}
+
+service FarmItemBySoldUser {
+  rpc UpdateFarmItem(domain.FarmItemState) returns (domain.FarmItemState) {
+    option (akkaserverless.method).eventing.in = {
+      value_entity: "farmitem"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "farmitem"
+    };
+  }
+
+  rpc GetFarmItem(BySoldUserRequest) returns (stream domain.FarmItemState) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * FROM farmitem WHERE boughtByUser = :boughtByUser"
+    };
+  }
+}
+
+message BySoldUserRequest {
+  string boughtByUser = 1;
+}
