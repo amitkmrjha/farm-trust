@@ -2,6 +2,8 @@ package com.lightbend;
 
 import com.akkaserverless.javasdk.AkkaServerless;
 import com.lightbend.farmtrust.farmitem.action.FarmItemEventSubscribeTopic;
+import com.lightbend.farmtrust.farmitem.action.FarmItemPublishTopic;
+import com.lightbend.farmtrust.farmitem.domain.action.FarmItemTopicPublishAction;
 import com.lightbend.farmtrust.farmitem.domain.action.FarmItemTopicSubscribeAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +19,11 @@ public final class Main {
                     .registerAction(
                             FarmItemTopicSubscribeAction.class,
                             FarmItemEventSubscribeTopic.getDescriptor()
-                                    .findServiceByName("FarmItemEventSubscriberService"));
+                                    .findServiceByName("FarmItemEventSubscriberService"))
+                    .registerAction(
+                            FarmItemTopicPublishAction.class,
+                            FarmItemPublishTopic.getDescriptor()
+                                    .findServiceByName("FarmItemPublishService"));
 
     public static void main(String[] args) throws Exception {
         LOG.info("starting the Akka Serverless service");
