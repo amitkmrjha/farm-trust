@@ -1,9 +1,14 @@
 package com.lightbend.farmtrust.farmitem.domain;
 
+import com.akkaserverless.javasdk.Effect;
 import com.akkaserverless.javasdk.EntityId;
+import com.akkaserverless.javasdk.Reply;
+import com.akkaserverless.javasdk.ServiceCallRef;
 import com.akkaserverless.javasdk.valueentity.*;
 import com.google.protobuf.Empty;
 import com.lightbend.farmtrust.farmitem.FarmItemApi;
+import com.lightbend.farmtrust.farmitem.domain.action.FarmItemTopicPublishAction;
+import com.lightbend.farmtrust.farmitem.util.PublishUtilApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +75,11 @@ public class FarmItemImpl extends FarmItemInterface {
     }
 
     @Override
-    protected Empty rateItem(FarmItemApi.RateItemMessage command, CommandContext<FarmItemDomain.FarmItemState> ctx) {
+    public Reply<Empty> rateItemWithReply(FarmItemApi.RateItemMessage command, CommandContext<FarmItemDomain.FarmItemState> ctx) {
+        final String forwardTo = "com.lightbend.farmtrust.farmitem.util.PublishUtilService";
+        ServiceCallRef<PublishUtilApi.PublishRatingMessage> publishRatingCallRef =
+                ctx.serviceCallFactory().lookup(forwardTo, "PublishRating", PublishUtilApi.PublishRatingMessage.class);
+
         Optional<FarmItemDomain.FarmItemState> stateOption = ctx.getState();
         if(!stateOption.isPresent()){
             throw ctx.fail(logStateInfo(FarmItemDomain.FarmItemState.newBuilder().build()));
@@ -79,13 +88,24 @@ public class FarmItemImpl extends FarmItemInterface {
         if(!state.getItemStatus().equals(FarmItemStatus.SOLD.name())){
             throw ctx.fail(logStateInfo(state));
         }
+
         FarmItemDomain.FarmItemState newState =
                 state.toBuilder()
                         .setUserRating(command.getRating())
                         .build();
+
+        PublishUtilApi.PublishRatingMessage pubMsg =
+                PublishUtilApi.PublishRatingMessage.newBuilder()
+                        .setPublishUtilId(FarmItemTopicPublishAction.defaultPublishUtilEntityId)
+                        .setFarmLandId(state.getFarmLandId())
+                        .setRating(command.getRating())
+                        .build();
+
         ctx.updateState(newState);
-        return Empty.getDefaultInstance();
+        return Reply.message(Empty.getDefaultInstance()).addEffects(Effect.of(publishRatingCallRef.createCall(pubMsg)));
     }
+
+
 
     @Override
     protected FarmItemApi.ItemInfo getItem(FarmItemApi.GetItemMessage command, CommandContext<FarmItemDomain.FarmItemState> ctx) {

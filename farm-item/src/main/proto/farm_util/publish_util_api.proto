@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package com.lightbend.farmtrust.farmitem.util;
+
+option java_outer_classname = "PublishUtilApi";
+
+message PublishRatingMessage {
+  string publish_util_id = 1 [(akkaserverless.field).entity_key = true];
+  string farmLandId = 2 ;
+  double rating = 3;
+}
+
+service PublishUtilService {
+  option (akkaserverless.service) = {
+    type : SERVICE_TYPE_ENTITY
+    component : ".domain.PublishUtil"
+  };
+
+  rpc PublishRating(PublishRatingMessage) returns (google.protobuf.Empty);
+}

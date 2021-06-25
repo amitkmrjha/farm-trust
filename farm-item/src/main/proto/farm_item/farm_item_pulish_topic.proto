@@ -3,21 +3,22 @@ syntax = "proto3";
 package com.lightbend.farmtrust.farmitem.action;
 
 import "akkaserverless/annotations.proto";
-import "farm_item/farm_item_domain.proto";
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/empty.proto";
 import "common/topic/farm_land_topic_message.proto";
 import "common/topic/farm_item_topic_message.proto";
+import "farm_util/publish_util_domain.proto";
 
 option java_outer_classname = "FarmItemPublishTopic";
 
 service FarmItemPublishService {
-    rpc PublishLandRating(domain.FarmItemState) returns (common.topic.LandRatingMessage) {
+
+    rpc PublishLandRating(util.domain.PublishRatingAdded) returns (common.topic.LandRatingMessage) {
         option (akkaserverless.method).eventing = {
             in: {
-                value_entity: "farmitem"
+                event_sourced_entity: "publishutil"
             }
             out: {
                 topic: "farm-item-events"
@@ -26,7 +27,7 @@ service FarmItemPublishService {
     }
     rpc CatchOthers(google.protobuf.Any) returns (google.protobuf.Empty) {
         option (akkaserverless.method).eventing.in = {
-            value_entity: "farmitem"
+            event_sourced_entity: "publishutil"
         };
     }
 

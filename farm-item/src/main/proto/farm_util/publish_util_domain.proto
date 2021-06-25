@@ -1,0 +1,26 @@
+
+syntax = "proto3";
+
+import "akkaserverless/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+package com.lightbend.farmtrust.farmitem.util.domain;
+
+option java_outer_classname = "FarmUtilDomain";
+
+message PublishRatingAdded {
+    string publish_util_id = 1;
+    string farmLandId = 2 ;
+    double rating = 3;
+}
+
+option (akkaserverless.file).event_sourced_entity = {
+    name: "PublishUtil"
+    entity_type: "publishutil"
+    state: "PublishUtilState"
+    events: ["PublishRatingAdded"]
+};
+
+message PublishUtilState {
+    string id = 1;
+}

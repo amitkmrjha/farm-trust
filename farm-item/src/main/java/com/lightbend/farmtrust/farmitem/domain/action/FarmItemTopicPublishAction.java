@@ -8,7 +8,7 @@ import com.google.protobuf.Timestamp;
 import com.lightbend.farmtrust.common.topic.FarmItemTopic;
 import com.lightbend.farmtrust.common.topic.FarmLandTopic;
 import com.lightbend.farmtrust.farmitem.domain.FarmItemDomain;
-import com.lightbend.farmtrust.farmitem.domain.FarmItemImpl;
+import com.lightbend.farmtrust.farmitem.util.domain.FarmUtilDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,26 +21,22 @@ import java.util.stream.Stream;
 public class FarmItemTopicPublishAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(FarmItemTopicPublishAction.class);
+    public static final String defaultPublishUtilEntityId = "default-publishutil-entity-id-xxxxx";
 
     @Handler
-    FarmItemTopic.LandRatingMessage publishLandRating(FarmItemDomain.FarmItemState state) {
-        String farmLandId = state.getFarmLandId();
-        String status = state.getItemStatus();
-        Double rating = state.getUserRating();
-        if(status.equals("SOLD") && rating != null){
-            LOG.info("Publishing rating for land : '{}' '{}' to topic.",state.getFarmLandId(),rating);
-            return FarmItemTopic.LandRatingMessage.newBuilder()
-                    .setFarmLandId(farmLandId)
-                    .setRating(rating)
-                    .build();
-        }
-        LOG.info("Publishing rating for land : Empty");
-        return FarmItemTopic.LandRatingMessage.getDefaultInstance();
+    FarmItemTopic.LandRatingMessage publishLandRating(FarmUtilDomain.PublishRatingAdded event) {
+        String farmLandId = event.getFarmLandId();
+        Double rating = event.getRating();
+        LOG.debug("Publishing rating for land : '{}' '{}' to topic.",farmLandId,rating);
+        return FarmItemTopic.LandRatingMessage.newBuilder()
+                .setFarmLandId(farmLandId)
+                .setRating(rating)
+                .build();
     }
 
     @Handler
     public Empty catchOthers(Any event) {
-        LOG.info("Publishing rating for land : catchOthers");
+        LOG.debug("Publishing rating for land : catchOthers");
         return Empty.getDefaultInstance();
     }
 }

@@ -14,19 +14,7 @@ public class FarmItemTest {
     private CommandContext<FarmItemDomain.FarmItemState> context = Mockito.mock(CommandContext.class);
     
     private class MockedContextFailure extends RuntimeException {};
-    
-    @Test
-    public void createMultipleItemsTest() {
-        entity = new FarmItemImpl(entityId);
-        
-        Mockito.when(context.fail("The command handler for `CreateMultipleItems` is not implemented, yet"))
-            .thenReturn(new MockedContextFailure());
-        
-        // TODO: set fields in command, and update assertions to match implementation
-        assertThrows(MockedContextFailure.class, () -> {
-            entity.createMultipleItemsWithReply(FarmItemApi.CreateItemMessage.newBuilder().build(), context);
-        });
-    }
+
     
     @Test
     public void createItemTest() {

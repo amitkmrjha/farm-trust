@@ -393,11 +393,8 @@ public class FarmLandImpl extends FarmLandInterface {
     }
 
     private double approxRollingAverage (double average,int currentCount, double newRating) {
-        LOG.debug("average '{}' currentCount '{}' newRating '{}' ",average,currentCount,newRating);
         Double newSum = (average*currentCount) + newRating;
-        LOG.debug("newSum '{}' ",newSum);
        Double  newAverage  = newSum/(currentCount+1);
-        LOG.debug("newAverage '{}' ",newAverage);
        return newAverage;
     }
 
