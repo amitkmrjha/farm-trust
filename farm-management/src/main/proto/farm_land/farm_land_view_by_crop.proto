@@ -13,6 +13,10 @@ message FarmLandQueryByCropName {
      string crop_name = 1;
 }
 
+message ByCropResponse {
+    repeated domain.FarmLandState results = 1;
+}
+
 service FarmLandByCropNameView {
     rpc ProcessCropSeasonStarted(domain.CropSeasonStarted) returns (domain.FarmLandState) {
         option (akkaserverless.method).eventing.in = {
@@ -114,9 +118,9 @@ service FarmLandByCropNameView {
         };
     }
 
-    rpc GetFarmLandByCropName(FarmLandQueryByCropName) returns (stream domain.FarmLandState) {
+    rpc GetFarmLandByCropName(FarmLandQueryByCropName) returns (ByCropResponse) {
         option (akkaserverless.method).view.query = {
-            query: "SELECT * FROM farmland WHERE crop_name = :crop_name"
+            query: "SELECT * AS results FROM farmland WHERE crop_name = :crop_name"
         };
     }
 }

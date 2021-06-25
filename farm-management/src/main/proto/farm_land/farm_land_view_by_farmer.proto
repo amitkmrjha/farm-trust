@@ -13,7 +13,7 @@ message FarmLandQueryByFarmerId {
      string farmer_name = 1;
 }
 
-message FarmLandQueryResponse {
+message ByFarmerResponse {
     repeated domain.FarmLandState results = 1;
 }
 
@@ -118,9 +118,9 @@ service FarmLandByFarmerIdView {
         };
     }
 
-    rpc GetFarmLandByFarmerId(FarmLandQueryByFarmerId) returns (stream domain.FarmLandState) {
+    rpc GetFarmLandByFarmerId(FarmLandQueryByFarmerId) returns (ByFarmerResponse) {
         option (akkaserverless.method).view.query = {
-            query: "SELECT * FROM farmland WHERE farmer_name = :farmer_name"
+            query: "SELECT * AS results FROM farmland WHERE farmer_name = :farmer_name"
         };
     }
 }

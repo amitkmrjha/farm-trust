@@ -7,6 +7,10 @@ option java_outer_classname = "FarmItemViewModel";
 import "farm_item/farm_item_domain.proto";
 import "akkaserverless/annotations.proto";
 
+message ResponseCollection {
+  repeated domain.FarmItemState results = 1;
+}
+
 service FarmItemByFarmLand {
   rpc UpdateFarmItem(domain.FarmItemState) returns (domain.FarmItemState) {
     option (akkaserverless.method).eventing.in = {
@@ -17,9 +21,9 @@ service FarmItemByFarmLand {
     };
   }
 
-  rpc GetFarmItem(ByFarmLandRequest) returns (stream domain.FarmItemState) {
+  rpc GetFarmItem(ByFarmLandRequest) returns (ResponseCollection) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * FROM farmitem WHERE farm_land_id = :farm_land_id AND itemStatus = :itemStatus"
+      query: "SELECT * AS results FROM farmitem WHERE farm_land_id = :farm_land_id AND itemStatus = :itemStatus"
     };
   }
 }
@@ -28,6 +32,9 @@ message ByFarmLandRequest {
   string farm_land_id = 1;
   string itemStatus = 2;
 }
+
+
+
 
 
 service FarmItemByFarmer {
@@ -40,9 +47,9 @@ service FarmItemByFarmer {
     };
   }
 
-  rpc GetFarmItem(ByFarmerRequest) returns (stream domain.FarmItemState) {
+  rpc GetFarmItem(ByFarmerRequest) returns (ResponseCollection) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * FROM farmitem WHERE farmer_name = :farmer_name AND itemStatus = :itemStatus"
+      query: "SELECT * AS results FROM farmitem WHERE farmer_name = :farmer_name AND itemStatus = :itemStatus"
     };
   }
 }
@@ -62,9 +69,9 @@ service FarmItemByCrop {
     };
   }
 
-  rpc GetFarmItem(ByCropRequest) returns (stream domain.FarmItemState) {
+  rpc GetFarmItem(ByCropRequest) returns (ResponseCollection) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * FROM farmitem WHERE crop_name = :crop_name AND itemStatus = :itemStatus"
+      query: "SELECT * AS results FROM farmitem WHERE crop_name = :crop_name AND itemStatus = :itemStatus"
     };
   }
 }
@@ -84,9 +91,9 @@ service FarmItemBySoldUser {
     };
   }
 
-  rpc GetFarmItem(BySoldUserRequest) returns (stream domain.FarmItemState) {
+  rpc GetFarmItem(BySoldUserRequest) returns (ResponseCollection) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * FROM farmitem WHERE boughtByUser = :boughtByUser"
+      query: "SELECT * AS results FROM farmitem WHERE boughtByUser = :boughtByUser"
     };
   }
 }
