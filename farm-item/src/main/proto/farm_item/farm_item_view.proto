@@ -17,13 +17,13 @@ service FarmItemByFarmLand {
       value_entity: "farmitem"
     };
     option (akkaserverless.method).view.update = {
-      table: "farmitem"
+      table: "farmitemtable"
     };
   }
 
   rpc GetFarmItem(ByFarmLandRequest) returns (ResponseCollection) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * AS results FROM farmitem WHERE farm_land_id = :farm_land_id AND itemStatus = :itemStatus"
+      query: "SELECT * AS results FROM farmitemtable WHERE farm_land_id = :farm_land_id AND itemStatus = :itemStatus"
     };
   }
 }
@@ -43,13 +43,13 @@ service FarmItemByFarmer {
       value_entity: "farmitem"
     };
     option (akkaserverless.method).view.update = {
-      table: "farmitem"
+      table: "farmitemtable"
     };
   }
 
   rpc GetFarmItem(ByFarmerRequest) returns (ResponseCollection) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * AS results FROM farmitem WHERE farmer_name = :farmer_name AND itemStatus = :itemStatus"
+      query: "SELECT * AS results FROM farmitemtable WHERE farmer_name = :farmer_name AND itemStatus = :itemStatus"
     };
   }
 }
@@ -65,13 +65,13 @@ service FarmItemByCrop {
       value_entity: "farmitem"
     };
     option (akkaserverless.method).view.update = {
-      table: "farmitem"
+      table: "farmitemtable"
     };
   }
 
   rpc GetFarmItem(ByCropRequest) returns (ResponseCollection) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * AS results FROM farmitem WHERE crop_name = :crop_name AND itemStatus = :itemStatus"
+      query: "SELECT * AS results FROM farmitemtable WHERE crop_name = :crop_name AND itemStatus = :itemStatus"
     };
   }
 }
@@ -87,13 +87,13 @@ service FarmItemBySoldUser {
       value_entity: "farmitem"
     };
     option (akkaserverless.method).view.update = {
-      table: "farmitem"
+      table: "farmitemtable"
     };
   }
 
   rpc GetFarmItem(BySoldUserRequest) returns (ResponseCollection) {
     option (akkaserverless.method).view.query = {
-      query: "SELECT * AS results FROM farmitem WHERE boughtByUser = :boughtByUser"
+      query: "SELECT * AS results FROM farmitemtable WHERE boughtByUser = :boughtByUser"
     };
   }
 }

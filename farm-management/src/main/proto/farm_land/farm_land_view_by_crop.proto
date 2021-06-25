@@ -23,7 +23,7 @@ service FarmLandByCropNameView {
             event_sourced_entity: "farmland"
         };
         option (akkaserverless.method).view.update = {
-            table: "farmland"
+            table: "farmlandtable"
             transform_updates: true
         };
     }
@@ -33,7 +33,7 @@ service FarmLandByCropNameView {
             event_sourced_entity: "farmland"
         };
         option (akkaserverless.method).view.update = {
-            table: "farmland"
+            table: "farmlandtable"
             transform_updates: true
         };
     }
@@ -43,7 +43,7 @@ service FarmLandByCropNameView {
             event_sourced_entity: "farmland"
         };
         option (akkaserverless.method).view.update = {
-            table: "farmland"
+            table: "farmlandtable"
             transform_updates: true
         };
     }
@@ -53,7 +53,7 @@ service FarmLandByCropNameView {
             event_sourced_entity: "farmland"
         };
         option (akkaserverless.method).view.update = {
-            table: "farmland"
+            table: "farmlandtable"
             transform_updates: true
         };
     }
@@ -63,7 +63,7 @@ service FarmLandByCropNameView {
             event_sourced_entity: "farmland"
         };
         option (akkaserverless.method).view.update = {
-            table: "farmland"
+            table: "farmlandtable"
             transform_updates: true
         };
     }
@@ -73,7 +73,7 @@ service FarmLandByCropNameView {
             event_sourced_entity: "farmland"
         };
         option (akkaserverless.method).view.update = {
-            table: "farmland"
+            table: "farmlandtable"
             transform_updates: true
         };
     }
@@ -83,7 +83,7 @@ service FarmLandByCropNameView {
             event_sourced_entity: "farmland"
         };
         option (akkaserverless.method).view.update = {
-            table: "farmland"
+            table: "farmlandtable"
             transform_updates: true
         };
     }
@@ -93,7 +93,7 @@ service FarmLandByCropNameView {
             event_sourced_entity: "farmland"
         };
         option (akkaserverless.method).view.update = {
-            table: "farmland"
+            table: "farmlandtable"
             transform_updates: true
         };
     }
@@ -103,7 +103,7 @@ service FarmLandByCropNameView {
             event_sourced_entity: "farmland"
         };
         option (akkaserverless.method).view.update = {
-            table: "farmland"
+            table: "farmlandtable"
             transform_updates: true
         };
     }
@@ -113,14 +113,14 @@ service FarmLandByCropNameView {
             event_sourced_entity: "farmland"
         };
         option (akkaserverless.method).view.update = {
-            table: "farmland"
+            table: "farmlandtable"
             transform_updates: true
         };
     }
 
     rpc GetFarmLandByCropName(FarmLandQueryByCropName) returns (ByCropResponse) {
         option (akkaserverless.method).view.query = {
-            query: "SELECT * AS results FROM farmland WHERE crop_name = :crop_name"
+            query: "SELECT * AS results FROM farmlandtable WHERE crop_name = :crop_name"
         };
     }
 }
